@@ -17,7 +17,7 @@ const catchAsyncWrapper = (asyncFn) => {
 const giveMeImageHtml = async (link) => {
   try {
     // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
-    const browser = await puppeteer.launch({ headless: true, executablePath: '/path/to/your/chromium' }); // Specify the path to your Chromium executable
+    const browser = await puppeteer.launch({ headless: true, executablePath: '/path/bin/chromium-browser' }); // Specify the path to your Chromium executable
     const page = await browser.newPage();
     await page.goto(link);
     await page.waitForTimeout(1000);
