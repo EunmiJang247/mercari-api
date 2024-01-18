@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core'); // Use puppeteer-core
 
 const { authService, userService, tokenService, emailService } = require('../services');
 
@@ -15,24 +15,36 @@ const catchAsyncWrapper = (asyncFn) => {
 };
 
 const giveMeImageHtml = async (link) => {
-  // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
-  await page.goto(link);
-  await page.waitForTimeout(1000);
-  const htmlContent = await page.content();
-  await browser.close();
-  return htmlContent;
+  try {
+    // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
+    const browser = await puppeteer.launch({ headless: true, executablePath: '/path/to/your/chromium' }); // Specify the path to your Chromium executable
+    const page = await browser.newPage();
+    await page.goto(link);
+    await page.waitForTimeout(1000);
+    const htmlContent = await page.content();
+    await browser.close();
+    return htmlContent;
+  } catch (error) {
+    // Puppeteer 실행 중 오류 발생 시 처리
+    console.error('Puppeteer error:', error);
+    throw new Error('Failed to fetch HTML content');
+  }
 };
 
 // 기존의 catchAsync 함수를 새로운 래퍼 함수로 대체
 const create = catchAsyncWrapper(async (req, res) => {
-  const html = await giveMeImageHtml(req.body.link);
-  console.log(html);
-  const $ = cheerio.load(html);
-  const firstImage = $('meta[property="og:image"]').attr('content');
-  console.log(firstImage);
-  res.status(httpStatus.CREATED).send({ firstImage });
+  try {
+    const html = await giveMeImageHtml(req.body.link);
+    console.log(html);
+    const $ = cheerio.load(html);
+    const firstImage = $('meta[property="og:image"]').attr('content');
+    console.log(firstImage);
+    res.status(httpStatus.CREATED).send({ firstImage });
+  } catch (error) {
+    // 비동기 함수에서 발생한 오류 처리
+    console.error('Async function error:', error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ message: 'Internal Server Error' });
+  }
 });
 
 module.exports = {
