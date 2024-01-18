@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const puppeteer = require('puppeteer-core'); // Use puppeteer-core
+const puppeteer = require('puppeteer');
 
 const { authService, userService, tokenService, emailService } = require('../services');
 
@@ -15,20 +15,14 @@ const catchAsyncWrapper = (asyncFn) => {
 };
 
 const giveMeImageHtml = async (link) => {
-  try {
-    // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
-    const browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox'] });
-    const page = await browser.newPage();
-    await page.goto(link);
-    await page.waitForTimeout(1000);
-    const htmlContent = await page.content();
-    await browser.close();
-    return htmlContent;
-  } catch (error) {
-    // Puppeteer 실행 중 오류 발생 시 처리
-    console.error('Puppeteer error:', error);
-    throw new Error('Failed to fetch HTML content');
-  }
+  // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const page = await browser.newPage();
+  await page.goto(link);
+  await page.waitForTimeout(1000);
+  const htmlContent = await page.content();
+  await browser.close();
+  return htmlContent;
 };
 
 // 기존의 catchAsync 함수를 새로운 래퍼 함수로 대체
