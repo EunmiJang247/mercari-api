@@ -19,7 +19,7 @@ const giveMeImageHtml = async (link) => {
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   await page.goto(link);
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
   const htmlContent = await page.content();
   await browser.close();
   return htmlContent;
