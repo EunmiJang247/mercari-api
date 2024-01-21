@@ -16,10 +16,10 @@ const catchAsyncWrapper = (asyncFn) => {
 
 const giveMeImageHtml = async (link) => {
   // Puppeteer 실행 시 오류 해결을 위해 headless 설정 추가
-  const browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser' ,args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   const page = await browser.newPage();
   await page.goto(link);
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1000);
   const htmlContent = await page.content();
   await browser.close();
   return htmlContent;
