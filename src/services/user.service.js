@@ -14,6 +14,14 @@ const createUser = async (userBody) => {
   return User.create(userBody);
 };
 
+const createUserWithNaverId = async (naverId) => {
+  return User.create({ naverId });
+};
+
+const getUserWithNaverId = async (naverId) => {
+  return User.findOne({ naverId });
+};
+
 /**
  * Query for users
  * @param {Object} filter - Mongo filter
@@ -81,6 +89,8 @@ const deleteUserById = async (userId) => {
 
 module.exports = {
   createUser,
+  createUserWithNaverId,
+  getUserWithNaverId,
   queryUsers,
   getUserById,
   getUserByEmail,
