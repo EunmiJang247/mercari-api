@@ -26,6 +26,12 @@ const refreshTokens = catchAsync(async (req, res) => {
   res.send({ ...tokens });
 });
 
+const verifyTokens = catchAsync(async (req, res) => {
+  const { user } = req.query;
+  const { authorization } = req.headers;
+  const tokens = await authService.verifyAuth(authorization, user);
+  res.send({ ...tokens });
+});
 const forgotPassword = catchAsync(async (req, res) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
   await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
@@ -94,4 +100,5 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   naverOauth,
+  verifyTokens
 };

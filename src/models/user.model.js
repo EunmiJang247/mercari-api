@@ -6,11 +6,26 @@ const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
-    naverId: {
+    name: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
-    }
+    },
+    email: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    role: {
+      type: String,
+      required: false,
+      trim: true,
+    },
   },
   {
     timestamps: true,

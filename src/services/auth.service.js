@@ -52,6 +52,26 @@ const refreshAuth = async (refreshToken) => {
 };
 
 /**
+ * Verify auth tokens
+ * @param {string} verifyToken
+ * @returns {Promise<Object>}
+ */
+const verifyAuth = async (verifyToken, userEmail) => {
+  try {
+    const verifyTokenDoc = await tokenService.verifyToken(verifyToken, tokenTypes.REFRESH);
+    console.log(verifyTokenDoc);
+    const user = await userService.getUserByEmail(userEmail);
+    if (!user) {
+      throw new Error();
+    }
+     const tokens = await tokenService.generateAuthTokens(user);
+     return {tokens, user}
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
+  }
+};
+
+/**
  * Reset password
  * @param {string} resetPasswordToken
  * @param {string} newPassword
@@ -94,6 +114,7 @@ module.exports = {
   loginUserWithEmailAndPassword,
   logout,
   refreshAuth,
+  verifyAuth,
   resetPassword,
   verifyEmail,
 };
