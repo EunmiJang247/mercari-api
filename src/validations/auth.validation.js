@@ -26,14 +26,15 @@ const logout = {
 const refreshTokens = {
   body: Joi.object().keys({
     refreshToken: Joi.string().required(),
+    user: Joi.string().required(),
   }),
 };
 
 const verifyTokens = {
   
-  // body: Joi.object().keys({
-  //   refreshToken: Joi.string().required(),
-  // }),
+  body: Joi.object().keys({
+    refreshToken: Joi.string().required(),
+  }),
 };
 
 const forgotPassword = {

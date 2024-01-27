@@ -52,7 +52,6 @@ const saveToken = async (token, userId, expires, type, blacklisted = false) => {
  * @returns {Promise<Token>}
  */
 const verifyToken = async (authorizationToken, type) => {
-  console.log('token service reached')
   const token = authorizationToken.split(" ")[1];
 
   const payload = jwt.verify(token, config.jwt.secret);

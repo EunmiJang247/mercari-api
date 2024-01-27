@@ -10,6 +10,6 @@ router.post('/register', validate(authValidation.register), authController.regis
 router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
-router.get('/verify-tokens', authController.verifyTokens);
+router.post('/verify-tokens',validate(authValidation.refreshTokens), authController.verifyTokens);
 
 module.exports = router;

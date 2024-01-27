@@ -27,9 +27,8 @@ const refreshTokens = catchAsync(async (req, res) => {
 });
 
 const verifyTokens = catchAsync(async (req, res) => {
-  const { user } = req.query;
   const { authorization } = req.headers;
-  const tokens = await authService.verifyAuth(authorization, user);
+  const tokens = await authService.verifyAuth(authorization, req.body.user);
   res.send({ ...tokens });
 });
 const forgotPassword = catchAsync(async (req, res) => {

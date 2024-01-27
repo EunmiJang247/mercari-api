@@ -59,7 +59,6 @@ const refreshAuth = async (refreshToken) => {
 const verifyAuth = async (verifyToken, userEmail) => {
   try {
     const verifyTokenDoc = await tokenService.verifyToken(verifyToken, tokenTypes.REFRESH);
-    console.log(verifyTokenDoc);
     const user = await userService.getUserByEmail(userEmail);
     if (!user) {
       throw new Error();
