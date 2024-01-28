@@ -53,41 +53,6 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const naverOauth = catchAsync(async (req, res) => {
-  const { accessToken } = req.query;
-  try {
-    const naverData = await axios({
-      method: 'GET',
-      url: 'https://openapi.naver.com/v1/nid/me',
-      headers: {
-        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    const naverId = naverData.data.response.id;
-    const userInfo = await userService.getUserWithNaverId(naverId);
-    if (userInfo) {
-      // If user exist already, generateAuthTokens
-      const authToken = await tokenService.generateAuthTokens(userInfo);
-      res.send({
-        user: userInfo,
-        token: authToken,
-      });
-    } else {
-      // If not,create new user
-      const user = await userService.createUserWithNaverId(naverId);
-      const authToken = await tokenService.generateAuthTokens(user);
-      res.send({
-        user: user,
-        token: authToken,
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    res.send(error);
-  }
-});
 
 module.exports = {
   register,
@@ -98,6 +63,5 @@ module.exports = {
   resetPassword,
   sendVerificationEmail,
   verifyEmail,
-  naverOauth,
   verifyTokens
 };

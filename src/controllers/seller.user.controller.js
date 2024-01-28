@@ -10,7 +10,7 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const listSeller = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const filter = pick(req.query, ['role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await userService.queryUsers(filter, options);
   res.send(result);
@@ -29,8 +29,9 @@ const updateUser = catchAsync(async (req, res) => {
   res.send(user);
 });
 
-const deleteUser = catchAsync(async (req, res) => {
-  await userService.deleteUserById(req.params.userId);
+const deleteSeller = catchAsync(async (req, res) => {
+  console.log(req);
+  await userService.deleteUserById(req.query.id);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -39,5 +40,5 @@ module.exports = {
   listSeller,
   getUser,
   updateUser,
-  deleteUser,
+  deleteSeller,
 };
