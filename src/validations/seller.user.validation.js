@@ -35,9 +35,17 @@ const deleteSeller = {
   }),
 };
 
+const createCategory = {
+  body: Joi.object().keys({
+    catName: Joi.string().required(),
+    parentCat: Joi.string().required(),
+    hscCode: Joi.number().required(),
+  }),
+};
 module.exports = {
   listSeller,
   getUser,
   updateUser,
   deleteSeller,
+  createCategory
 };

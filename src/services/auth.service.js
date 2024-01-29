@@ -7,14 +7,16 @@ const { tokenTypes } = require('../config/tokens');
 
 /**
  * Login with username and password
- * @param {string} email
+ * @param {string} loginId
  * @param {string} password
  * @returns {Promise<User>}
  */
-const loginUserWithEmailAndPassword = async (email, password) => {
-  const user = await userService.getUserByEmail(email);
+const loginUserWithLoginIdAndPassword = async (loginId, password) => {
+  console.log('reached service' + loginId)
+  const user = await userService.getUserByUserId(loginId);
+  console.log(user);
   if (!user || !(await user.isPasswordMatch(password))) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect login Id or password');
   }
   return user;
 };
@@ -56,10 +58,10 @@ const refreshAuth = async (refreshToken) => {
  * @param {string} verifyToken
  * @returns {Promise<Object>}
  */
-const verifyAuth = async (verifyToken, userEmail) => {
+const verifyAuth = async (verifyToken, userId) => {
   try {
     const verifyTokenDoc = await tokenService.verifyToken(verifyToken, tokenTypes.REFRESH);
-    const user = await userService.getUserByEmail(userEmail);
+    const user = await userService.getUserByUserId(userId);
     if (!user) {
       throw new Error();
     }
@@ -110,7 +112,7 @@ const verifyEmail = async (verifyEmailToken) => {
 };
 
 module.exports = {
-  loginUserWithEmailAndPassword,
+  loginUserWithLoginIdAndPassword,
   logout,
   refreshAuth,
   verifyAuth,

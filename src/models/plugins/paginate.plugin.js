@@ -20,6 +20,7 @@ const paginate = (schema) => {
    * @returns {Promise<QueryResult>}
    */
   schema.statics.paginate = async function (filter, options) {
+    console.log({filter, options})
     let sort = '';
     if (options.sortBy) {
       const sortingCriteria = [];
