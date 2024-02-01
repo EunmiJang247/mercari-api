@@ -13,14 +13,11 @@ const createCategory = catchAsync(async (req, res) => {
 
 const listCategory = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['catName']);
-  console.log(filter)
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await categoryService.queryCategories(filter, options);
-  //  console.log(result);
   res.send(result);
 });
 const deleteSeller = catchAsync(async (req, res) => {
-  console.log(req);
   await userService.deleteUserById(req.query.id);
   res.status(httpStatus.NO_CONTENT).send();
 });

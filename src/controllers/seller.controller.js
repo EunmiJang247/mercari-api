@@ -11,7 +11,6 @@ const listSeller = catchAsync(async (req, res) => {
   res.send(result);
 });
 const deleteSeller = catchAsync(async (req, res) => {
-  console.log(req);
   await userService.deleteUserById(req.query.id);
   res.status(httpStatus.NO_CONTENT).send();
 });

@@ -24,7 +24,6 @@ const queryCategories = async (filter, options) => {
   const categories = Category.find({
     parentCatName: { $eq: filter['catName'] }
   });
-  // console.log(categories);
   return categories;
 };
 

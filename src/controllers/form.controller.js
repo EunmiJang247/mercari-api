@@ -29,10 +29,8 @@ const giveMeImageHtml = async (link) => {
 const create = catchAsyncWrapper(async (req, res) => {
   try {
     const html = await giveMeImageHtml(req.body.link);
-    console.log(html);
     const $ = cheerio.load(html);
     const firstImage = $('meta[property="og:image"]').attr('content');
-    console.log(firstImage);
     res.status(httpStatus.CREATED).send({ firstImage });
   } catch (error) {
     // 비동기 함수에서 발생한 오류 처리

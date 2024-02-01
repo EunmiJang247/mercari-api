@@ -4,7 +4,6 @@ const { authService, userService, tokenService, emailService } = require('../ser
 const axios = require('axios');
 
 const register = catchAsync(async (req, res) => {
-  console.log(req.body);
   const user = await userService.createUser(req.body);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
@@ -12,7 +11,6 @@ const register = catchAsync(async (req, res) => {
 
 const login = catchAsync(async (req, res) => {
   const { loginId, password } = req.body;
-  console.log(req.body);
   const user = await authService.loginUserWithLoginIdAndPassword(loginId, password);
   const tokens = await tokenService.generateAuthTokens(user);
   res.send({ user, tokens });

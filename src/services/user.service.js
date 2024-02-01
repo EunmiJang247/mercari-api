@@ -8,8 +8,6 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  console.log('ser reg')
-  console.log(userBody);
   if (await User.isLoginIdTaken(userBody.loginId)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User Id already taken');
   }
@@ -53,8 +51,6 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByUserId = async (loginId) => {
-  console.log('reached user serveice')
-  console.log(loginId)
   return User.findOne({ loginId });
 };
 
