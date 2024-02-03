@@ -51,13 +51,40 @@ const saveToken = async (token, _id, expires, type, blacklisted = false) => {
  * @param {string} type
  * @returns {Promise<Token>}
  */
+// const verifyToken = async (refreshToken) => {
+//   const payload = jwt.verify(refreshToken, ctokenTypes.REFRESH);
+//   if (!payload) {
+//     throw new Error("Token not found");
+//   } 
+//   return payload;
+// };
+
+
 const verifyToken = async (refreshToken) => {
-  const payload = jwt.verify(refreshToken, config.jwt.secret);
-  if (!payload) {
-    throw new Error("Token not found");
-  } 
-  return payload;
+  try {
+    const payload = jwt.verify(refreshToken, config.jwt.secret);
+    if (!payload) {
+      throw new Error("Token not found");
+    } 
+    return payload;
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      // Token has expired, handle the situation
+      // For example, generate a new token or log the user out
+      console.error('TokenExpiredError:', error.message);
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Token has expired');
+    } else {
+      // Handle other errors
+      console.error('Error verifying token:', error.message);
+      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error');
+    }
+  }
 };
+
+
+
+
+
 
 /**
  * Generate auth tokens
