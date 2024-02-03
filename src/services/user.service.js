@@ -1,6 +1,6 @@
-const httpStatus = require('http-status');
-const { User } = require('../models');
-const ApiError = require('../utils/ApiError');
+const httpStatus = require("http-status");
+const { User } = require("../models");
+const ApiError = require("../utils/ApiError");
 
 /**
  * Create a user
@@ -9,17 +9,9 @@ const ApiError = require('../utils/ApiError');
  */
 const createUser = async (userBody) => {
   if (await User.isLoginIdTaken(userBody.loginId)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User Id already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, "Login Id already taken");
   }
   return User.create(userBody);
-};
-
-const createUserWithNaverId = async (naverId) => {
-  return User.create({ naverId });
-};
-
-const getUserWithNaverId = async (naverId) => {
-  return User.findOne({ naverId });
 };
 
 /**
@@ -46,31 +38,12 @@ const getUserById = async (id) => {
 };
 
 /**
- * Get user by email
- * @param {string} email
+ * Get user by loginID
+ * @param {string} logiId
  * @returns {Promise<User>}
  */
 const getUserByUserId = async (loginId) => {
   return User.findOne({ loginId });
-};
-
-/**
- * Update user by id
- * @param {ObjectId} userId
- * @param {Object} updateBody
- * @returns {Promise<User>}
- */
-const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  }
-  Object.assign(user, updateBody);
-  await user.save();
-  return user;
 };
 
 /**
@@ -81,7 +54,7 @@ const updateUserById = async (userId, updateBody) => {
 const deleteUserById = async (userId) => {
   const user = await getUserById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
   await user.remove();
   return user;
@@ -89,11 +62,8 @@ const deleteUserById = async (userId) => {
 
 module.exports = {
   createUser,
-  createUserWithNaverId,
-  getUserWithNaverId,
   queryUsers,
   getUserById,
   getUserByUserId,
-  updateUserById,
   deleteUserById,
 };

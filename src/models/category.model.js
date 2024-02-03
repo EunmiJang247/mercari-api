@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { toJSON, paginate } = require('./plugins');
+const mongoose = require("mongoose");
+const { toJSON, paginate } = require("./plugins");
 const subcategorySchema = mongoose.Schema(
   {
     prodNmaeko: {
@@ -22,6 +22,8 @@ const subcategorySchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
@@ -33,5 +35,5 @@ subcategorySchema.plugin(paginate);
 /**
  * @typedef Category
  */
-const Category = mongoose.model('Category', subcategorySchema);
+const Category = mongoose.model("Category", subcategorySchema);
 module.exports = Category;

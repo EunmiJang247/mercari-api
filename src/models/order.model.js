@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const { toJSON, paginate } = require('./plugins');
-const { array } = require('joi');
+const mongoose = require("mongoose");
+const { toJSON, paginate } = require("./plugins");
+const { array } = require("joi");
 const ordersSchema = mongoose.Schema(
   {
     nickName: {
@@ -24,40 +24,42 @@ const ordersSchema = mongoose.Schema(
       trim: true,
     },
     address: {
-        type: String,
-        required: false,
-        trim: true,
-      },
-      items: {
-        type: [],
-        required: false,
-        trim: true,
-      },
-      deliveryDate: {
-        type: Date,
-        required: false,
-        trim: true,
-      },
-      inspectionNeed: {
-        type: String,
-        required: false,
-        trim: true,
-      },
-      memoTaStep: {
-        type: String,
-        required: false,
-        trim: true,
-      },
-      memoToDelivery: {
-        type: String,
-        required: false,
-        trim: true,
-      },
-      reservation: {
-        type: String,
-        required: false,
-        trim: true,
-      },
+      type: String,
+      required: false,
+      trim: true,
+    },
+    items: {
+      type: [],
+      required: false,
+      trim: true,
+    },
+    deliveryDate: {
+      type: Date,
+      required: false,
+      trim: true,
+    },
+    inspectionNeed: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    memoTaStep: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    memoToDelivery: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    reservation: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
@@ -69,5 +71,5 @@ ordersSchema.plugin(paginate);
 /**
  * @typedef Order
  */
-const Order = mongoose.model('Order', ordersSchema);
+const Order = mongoose.model("Order", ordersSchema);
 module.exports = Order;

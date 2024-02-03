@@ -1,31 +1,22 @@
-const passport = require('passport');
-const httpStatus = require('http-status');
-const ApiError = require('../utils/ApiError');
-const { roleRights } = require('../config/roles');
+const passport = require("passport");
+const httpStatus = require("http-status");
+const ApiError = require("../utils/ApiError");
+const { tokenService } = require("../services");
 
-const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
-  if (err || info || !user) {
-    return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
-  }
-  req.user = user;
-  if (requiredRights.length) {
-    const userRights = roleRights.get(user.role);
-    const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight));
-    if (!hasRequiredRights) {
-      return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
+const isAuth = async (req, res, next) => {
+  const { authorization } = req.headers;
+  try {
+    const token = authorization.split(" ")[1];
+    const decoded = tokenService.verifyToken(token);
+    if (decoded) {
+      next();
     }
+  } catch (err) {
+    res.status(401).send({
+      message: err.message,
+    });
   }
-
-  resolve();
 };
-
-const auth =
-  (...requiredRights) =>
-  async (req, res, next) =>
-    new Promise((resolve, reject) => {
-      passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, requiredRights))(req, res, next);
-    })
-      .then(() => next())
-      .catch((err) => next(err));
-
-module.exports = auth;
+module.exports = {
+  isAuth,
+};
