@@ -25,12 +25,15 @@ const createCrawling = async (bodyData) => {
           }
           return null;
         });
-    
-        imageData.push({
-          url: items.link,
-          imageSources: imageSources,
-        });
-    
+        if (imageSources !== null) {
+          imageData.push({
+            url: items.link,
+            imageSources: imageSources,
+          });
+          console.log("Image Sources:", imageSources);
+        } else {
+          console.log("No image sources found for:", items.link);
+        }
         console.log("Image Sources:", imageSources);
       } catch (error) {
         console.error("Error during navigation:", error.message);
