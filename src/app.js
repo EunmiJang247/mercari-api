@@ -11,6 +11,7 @@ const morgan = require("./config/morgan");
 const { jwtStrategy } = require("./config/passport");
 const { authLimiter } = require("./middlewares/rateLimiter");
 const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/v1");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
 
@@ -70,6 +71,8 @@ app.use(passport.initialize());
 passport.use("jwt", jwtStrategy);
 
 app.use("/admin", adminRoutes);
+app.use("/v1", userRoutes);
+
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

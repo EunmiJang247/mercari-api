@@ -65,6 +65,48 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const naverOauth = catchAsync(async (req, res) => {
+  const { accessToken } = req.query;
+  try {
+    const naverData = await axios({
+      method: 'GET',
+      url: 'https://openapi.naver.com/v1/nid/me',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: {
+        property_keys: ['kakao_account.name', 'kakao_account.email'],
+      },
+    });
+
+    const naverId = naverData.data.response.id;
+    const usercheck = await User.findOne({ naverId });
+    if (usercheck) {
+      // If user exist already, generateAuthTokens
+      const authToken = await tokenService.generateAuthTokens(usercheck);
+      const doc = userService.serializer(usercheck);
+      res.send({
+        user: doc,
+        token: authToken,
+      });
+    } else {
+      const user = await userService.createSellerKakao(naverData.data);
+      const authToken = await tokenService.generateAuthTokens(user);
+      const doc = userService.serializer(user);
+      // console.log(user, "user.")
+      res.send({
+        user: doc,
+        token: authToken,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   register,
   login,
@@ -75,4 +117,5 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   verifyTokens,
+  naverOauth,
 };
