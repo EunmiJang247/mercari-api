@@ -11,7 +11,6 @@ const listOrders = catchAsync(async (req, res) => {
   res.send(result);
 });
 const createCrawling = catchAsync(async (req, res) => {
-  console.log(req.body.links)
   const result = await crawlingService.createCrawling(req.body.links);
   res.send(result);
 });

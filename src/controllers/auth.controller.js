@@ -28,10 +28,15 @@ const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
   res.status(httpStatus.NO_CONTENT).send();
 });
-
 const refreshTokens = catchAsync(async (req, res) => {
-  const tokens = await authService.refreshAuth(req.body.refreshToken);
-  res.send({ ...tokens });
+  try {
+    const tokens = await authService.refreshAuth(req.body.refreshToken);
+    res.send({ ...tokens });
+  } catch (error) {
+    // Handle the error appropriately, such as logging it and sending an error response
+    console.error('Error in refreshTokens:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 const verifyTokens = catchAsync(async (req, res) => {
@@ -75,28 +80,23 @@ const naverOauth = catchAsync(async (req, res) => {
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
         Authorization: `Bearer ${accessToken}`,
       },
-      data: {
-        property_keys: ['kakao_account.name', 'kakao_account.email'],
-      },
     });
 
     const naverId = naverData.data.response.id;
-    const usercheck = await User.findOne({ naverId });
-    if (usercheck) {
+    const userInfo = await userService.getUserWithNaverId(naverId);
+    if (userInfo) {
       // If user exist already, generateAuthTokens
-      const authToken = await tokenService.generateAuthTokens(usercheck);
-      const doc = userService.serializer(usercheck);
+      const authToken = await tokenService.generateAuthTokens(userInfo);
       res.send({
-        user: doc,
+        user: userInfo,
         token: authToken,
       });
     } else {
-      const user = await userService.createSellerKakao(naverData.data);
+      // If not,create new user
+      const user = await userService.createUserWithNaverId(naverId);
       const authToken = await tokenService.generateAuthTokens(user);
-      const doc = userService.serializer(user);
-      // console.log(user, "user.")
       res.send({
-        user: doc,
+        user: user,
         token: authToken,
       });
     }
@@ -104,7 +104,6 @@ const naverOauth = catchAsync(async (req, res) => {
     console.log(error);
     res.send(error);
   }
-  res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = {

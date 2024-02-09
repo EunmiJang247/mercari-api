@@ -57,7 +57,6 @@ const createCrawling = async (bodyData) => {
 
     try {
       for (const items of bodyData) {
-        console.log(items.link);
         await page.goto(items.link, {
           waitUntil: 'networkidle2',
         });
@@ -78,9 +77,9 @@ const createCrawling = async (bodyData) => {
             url: items.link,
             imageSources: imageSources,
           });
-          console.log('Image Sources:', imageSources);
+          // console.log('Image Sources:', imageSources);
         } else {
-          console.log('No image sources found for:', items.link);
+          // console.log('No image sources found for:', items.link);
           // If image source is null, break the loop and retry
           await browser.close();
           break;

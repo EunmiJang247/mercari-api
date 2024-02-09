@@ -34,8 +34,16 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  try {
+    const user = await User.findById(id);
+    return user;
+  } catch (error) {
+    // Handle the error appropriately
+    console.error('Error in getUserById:', error);
+    throw error; // Propagate the error for higher-level handling
+  }
 };
+
 
 /**
  * Get user by loginID
@@ -43,7 +51,14 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByUserId = async (loginId) => {
-  return User.findOne({ loginId });
+  try {
+    const user = await User.findOne({ loginId });
+    return user;
+  } catch (error) {
+    // Handle the error appropriately
+    console.error('Error in getUserByUserId:', error);
+    throw error; // Propagate the error for higher-level handling
+  }
 };
 
 /**
@@ -59,6 +74,29 @@ const deleteUserById = async (userId) => {
   await user.remove();
   return user;
 };
+const createUserWithNaverId = async (naverId) => {
+  return User.create({ naverId });
+};
+
+const getUserWithNaverId = async (naverId) => {
+  return User.findOne({ naverId });
+};
+/**
+ * Update user by id
+ * @param {ObjectId} userId
+ * @param {Object} updateBody
+ * @returns {Promise<User>}
+ */
+const updateUserById = async (userId, updateBody) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  Object.assign(user, updateBody);
+  await user.save();
+  return user;
+};
+
 
 module.exports = {
   createUser,
@@ -66,4 +104,7 @@ module.exports = {
   getUserById,
   getUserByUserId,
   deleteUserById,
+  createUserWithNaverId,
+  getUserWithNaverId,
+  updateUserById
 };

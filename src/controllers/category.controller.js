@@ -17,6 +17,17 @@ const listCategory = catchAsync(async (req, res) => {
   const result = await categoryService.queryCategories(filter, options);
   res.send(result);
 });
+
+const listClientCategory = catchAsync(async (req, res) => {
+  try {
+    const result = await categoryService.getallcategory();
+    res.send(result);
+  } catch (error) {
+    // Handle the error appropriately, such as logging it and sending an error response
+    console.error('Error in listClientCategory:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 const deleteSeller = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.query.id);
   res.status(httpStatus.NO_CONTENT).send();
@@ -26,4 +37,5 @@ module.exports = {
   deleteSeller,
   listCategory,
   createCategory,
+  listClientCategory,
 };

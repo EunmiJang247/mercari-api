@@ -21,13 +21,23 @@ const createCategory = async (catBody) => {
  */
 const queryCategories = async (filter, options) => {
   // const categories = await Category.findAll(filter, options);
-  const categories = Category.find({
+  const categories = await Category.find({
     parentCatName: { $eq: filter['catName'] }
   });
   return categories;
 };
-
+const getallcategory = async () => {
+  try {
+    const categories = await Category.find({});
+    return categories;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Error in getallcategory:', error);
+    throw error; // Propagate the error for higher-level handling
+  }
+};
 module.exports = {
   createCategory,
-  queryCategories
+  queryCategories,
+  getallcategory
 };

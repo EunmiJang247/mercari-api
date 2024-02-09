@@ -31,6 +31,36 @@ const userSchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    naverId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    nickName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    transactionNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    utype: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },
