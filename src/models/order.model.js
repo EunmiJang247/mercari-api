@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
-const { array } = require("joi");
+const { array, boolean } = require("joi");
 const ordersSchema = mongoose.Schema(
   {
     nickName: {
@@ -57,6 +57,15 @@ const ordersSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true,
+    },
+    uid: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    agreeToTerms: {
+      type: Boolean,
+      required: false,
     },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

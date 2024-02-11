@@ -27,7 +27,7 @@ const queryOrders = async (options) => {
         createdAt: {
           $gte: dateFrom,
           $lte: dateTo,
-        },
+        }
       }).sort({ createdAt: 1 })
         .skip(skip)
         .limit(parseInt(options.limit));
@@ -56,7 +56,59 @@ const queryOrders = async (options) => {
     console.error("Error fetching data:", error.message);
   }
 };
+const queryOrdersByUser = async (options) => {
+  try {
+    const skip = (options.page - 1) * options.limit;
+    const dateFrom = options.dateFrom;
+    const uid = options.uid;
+    const dateTo = new Date(options.dateTo);
 
+    // Increase dateTo by one day
+    dateTo.setDate(dateTo.getDate() + 1);
+
+    if (dateFrom && dateTo) {
+      const rawData = await Order.find({
+        createdAt: {
+          $gte: dateFrom,
+          $lte: dateTo,
+        },
+        uid: uid
+      }).sort({ createdAt: 1 })
+        .skip(skip)
+        .limit(parseInt(options.limit));
+
+      // Map the array to format the deliveryDate field
+      const data = rawData.map((doc) => ({
+        ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
+        deliveryDate: formatDate(doc.deliveryDate),
+        createdAt: formatDate(doc.createdAt),
+      }));
+      return { data };
+    } else {
+      const rawData = await Order.find({ uid: uid })
+        .skip(skip)
+        .limit(parseInt(options.limit));
+
+      // Map the array to format the deliveryDate field
+      const data = rawData.map((doc) => ({
+        ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
+        deliveryDate: formatDate(doc.deliveryDate),
+        createdAt: formatDate(doc.createdAt),
+      }));
+      return { data };
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+  }
+};
+
+
+const createOrder = async (orderbody) => {
+  console.log(orderbody.formData);
+    return Order.create(orderbody.formData);
+};
 module.exports = {
   queryOrders,
+  createOrder,
+  queryOrdersByUser
 };

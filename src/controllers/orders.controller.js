@@ -10,12 +10,24 @@ const listOrders = catchAsync(async (req, res) => {
   const result = await ordersService.queryOrders(options);
   res.send(result);
 });
+const listOrdersbyiser = catchAsync(async (req, res) => {
+  const options = pick(req.query, ["sortBy", "dateFrom", "dateTo", "uid"]);
+  const result = await ordersService.queryOrdersByUser(options);
+  res.send(result);
+});
+
 const createCrawling = catchAsync(async (req, res) => {
   const result = await crawlingService.createCrawling(req.body.links);
   res.send(result);
+});
+const createUser = catchAsync(async (req, res) => {
+  const order = await ordersService.createOrder(req.body);
+  res.status(httpStatus.CREATED).send(order);
 });
 
 module.exports = {
   listOrders,
   createCrawling,
+  createUser,
+  listOrdersbyiser
 };

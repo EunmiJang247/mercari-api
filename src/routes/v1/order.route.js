@@ -5,8 +5,9 @@ const { isAuth } = require("../../middlewares/auth");
 
 const router = express.Router();
 
-router.get('/category', isAuth, categoryController.listClientCategory);
-// router.post('/', orderController.create);
+router.get('/category', categoryController.listClientCategory);
+ router.post('/createorder', orderController.createUser);
+ router.get("/orders-listing", orderController.listOrdersbyiser);
 
 
 module.exports = router;

@@ -8,7 +8,7 @@ const auth = require('../../middlewares/auth');
 const { isAuth } = require("../../middlewares/auth");
 
 const router = express.Router();
-router.put('/update-user', isAuth, userController.updateUser);
+router.put('/update-user', userController.updateUser);
 router.get('/oauth/', authController.naverOauth);
 router.post(
     "/verify-tokens",
