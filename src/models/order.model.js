@@ -1,61 +1,61 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
-const { array, boolean } = require("joi");
+const { array, boolean, string } = require("joi");
 const ordersSchema = mongoose.Schema(
   {
     nickName: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     phoneNumber: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     name: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     transactionNumber: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     address: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     items: {
       type: [],
-      required: false,
+      required: true,
       trim: true,
     },
     deliveryDate: {
       type: Date,
-      required: false,
+      required: true,
       trim: true,
     },
     inspectionNeed: {
-      type: String,
-      required: false,
+      type: Boolean,
+      required: true,
       trim: true,
     },
-    memoTaStep: {
+    memoToStep: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     memoToDelivery: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     reservation: {
-      type: String,
-      required: false,
+      type: Boolean,
+      required: true,
       trim: true,
     },
     uid: {
@@ -65,7 +65,12 @@ const ordersSchema = mongoose.Schema(
     },
     agreeToTerms: {
       type: Boolean,
-      required: false,
+      required: true,
+    },
+    utype: {
+      type: String,
+      required: true,
+      trim: true,
     },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

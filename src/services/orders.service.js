@@ -104,8 +104,7 @@ const queryOrdersByUser = async (options) => {
 
 
 const createOrder = async (orderbody) => {
-  console.log(orderbody.formData);
-    return Order.create(orderbody.formData);
+    return Order.create(orderbody);
 };
 module.exports = {
   queryOrders,
