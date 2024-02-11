@@ -34,6 +34,6 @@ router.get(
   categoryController.listCategory
 );
 router.get("/orders-listing", isAuth, ordersController.listOrders);
-router.post("/orders-crawling", isAuth, ordersController.createCrawling);
+router.post("/orders-crawling", ordersController.createCrawling);
 
 module.exports = router;
