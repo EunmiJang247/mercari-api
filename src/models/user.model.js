@@ -38,27 +38,27 @@ const userSchema = mongoose.Schema(
     },
     nickName: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     transactionNumber: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     utype: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     address: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     createdAt: { type: Date, default: Date.now },

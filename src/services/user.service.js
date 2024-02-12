@@ -75,7 +75,8 @@ const deleteUserById = async (userId) => {
   return user;
 };
 const createUserWithNaverId = async (naverId) => {
-  return User.create({ naverId });
+   const result = await User.create({ naverId });
+   return result;
 };
 
 const getUserWithNaverId = async (naverId) => {
