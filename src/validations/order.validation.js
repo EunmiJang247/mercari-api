@@ -19,6 +19,7 @@ const createOrder = {
       link: Joi.string().required(),
       price: Joi.string().required(),
       quantity: Joi.string().required(),
+      subcategory: Joi.string().required(),
     })).required(),
     deliveryDate: Joi.date().required(),
     inspectionNeed: Joi.boolean().required(),

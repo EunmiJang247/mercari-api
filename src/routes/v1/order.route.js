@@ -11,6 +11,8 @@ router.post("/createorder", validate(orderValidation.createOrder), orderControll
 router.put("/updateorder", orderController.updateOrder);
 
 router.get("/getorderbyid", orderController.getorder);
+router.delete("/deleteorderbyid", orderController.deleteorder);
+
 
 router.get(
   "/orders-listing", orderController.listOrdersbyiser

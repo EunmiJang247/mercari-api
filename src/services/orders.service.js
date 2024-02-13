@@ -118,11 +118,22 @@ const getOrder = async (id) => {
   return Order.findById(id);
 };
 
+const deleteOrderById = async (id) => {
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(id);
+    return deletedOrder;
+  } catch (error) {
+    // Handle any errors that occur during the deletion process
+    console.error('Error deleting order:', error);
+    throw error; // Rethrow the error to handle it in the caller function if needed
+  }
+};
 
 module.exports = {
   queryOrders,
   createOrder,
   queryOrdersByUser,
   getOrder,
-  updateOrder
+  updateOrder,
+  deleteOrderById
 };

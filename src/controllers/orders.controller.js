@@ -33,11 +33,17 @@ const getorder = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(order);
 });
 
+const deleteorder = catchAsync(async (req, res) => {
+  const order = await ordersService.deleteOrderById(req.query.id);
+  res.status(httpStatus.CREATED).send(order);
+});
+
 module.exports = {
   listOrders,
   createCrawling,
   createOrder,
   listOrdersbyiser,
   getorder,
-  updateOrder
+  updateOrder,
+  deleteorder,
 };
