@@ -101,13 +101,28 @@ const queryOrdersByUser = async (options) => {
     console.error("Error fetching data:", error.message);
   }
 };
-
-
 const createOrder = async (orderbody) => {
     return Order.create(orderbody);
 };
+const updateOrder = async (updateData) => {
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(updateData.id, updateData, { new: true });
+    return updatedOrder;
+  } catch (error) {
+    // Handle error
+    console.error('Error updating order:', error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
+};
+const getOrder = async (id) => {
+  return Order.findById(id);
+};
+
+
 module.exports = {
   queryOrders,
   createOrder,
-  queryOrdersByUser
+  queryOrdersByUser,
+  getOrder,
+  updateOrder
 };

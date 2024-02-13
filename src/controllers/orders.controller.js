@@ -20,14 +20,24 @@ const createCrawling = catchAsync(async (req, res) => {
   const result = await crawlingService.createCrawling(req.body.links);
   res.send(result);
 });
-const createUser = catchAsync(async (req, res) => {
+const createOrder = catchAsync(async (req, res) => {
   const order = await ordersService.createOrder(req.body);
+  res.status(httpStatus.CREATED).send(order);
+});
+const updateOrder = catchAsync(async (req, res) => {
+  const order = await ordersService.updateOrder(req.body);
+  res.status(httpStatus.CREATED).send(order);
+});
+const getorder = catchAsync(async (req, res) => {
+  const order = await ordersService.getOrder(req.query.id);
   res.status(httpStatus.CREATED).send(order);
 });
 
 module.exports = {
   listOrders,
   createCrawling,
-  createUser,
-  listOrdersbyiser
+  createOrder,
+  listOrdersbyiser,
+  getorder,
+  updateOrder
 };

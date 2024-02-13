@@ -7,7 +7,11 @@ const router = express.Router();
 const validate = require("../../middlewares/validate");
 
 router.get("/category", categoryController.listClientCategory);
-router.post("/createorder", validate(orderValidation.createOrder), orderController.createUser);
+router.post("/createorder", validate(orderValidation.createOrder), orderController.createOrder);
+router.put("/updateorder", orderController.updateOrder);
+
+router.get("/getorderbyid", orderController.getorder);
+
 router.get(
   "/orders-listing", orderController.listOrdersbyiser
 );
