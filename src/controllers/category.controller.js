@@ -6,6 +6,7 @@ const { userService } = require('../services');
 const { categoryService } = require('../services');
 
 const createCategory = catchAsync(async (req, res) => {
+  console.log(req.body);
   const user = await categoryService.createCategory(req.body);
   res.status(httpStatus.CREATED).send(user);
 });
@@ -15,6 +16,10 @@ const listCategory = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['catName']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await categoryService.queryCategories(filter, options);
+  res.send(result);
+});
+const listparentCategory = catchAsync(async (req, res) => {
+  const result = await categoryService.getallparentcategory();
   res.send(result);
 });
 
@@ -38,4 +43,5 @@ module.exports = {
   listCategory,
   createCategory,
   listClientCategory,
+  listparentCategory,
 };

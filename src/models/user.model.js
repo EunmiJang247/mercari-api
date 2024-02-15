@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema(
     },
     naverId: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     nickName: {

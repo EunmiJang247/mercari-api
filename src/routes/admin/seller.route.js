@@ -33,6 +33,11 @@ router.get(
   validate(categoryValidation.listCategory),
   categoryController.listCategory
 );
+router.get(
+  "/category-listing",
+  isAuth,
+  categoryController.listparentCategory
+);
 router.get("/orders-listing", isAuth, ordersController.listOrders);
 router.post("/orders-crawling", ordersController.createCrawling);
 

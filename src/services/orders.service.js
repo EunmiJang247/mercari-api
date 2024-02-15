@@ -35,7 +35,8 @@ const queryOrders = async (options) => {
       // Map the array to format the deliveryDate field
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
-        deliveryDate: formatDate(doc.deliveryDate),
+        deliveryDate: 
+        doc.deliveryDate,
         createdAt: formatDate(doc.createdAt),
       }));
       return { data };
@@ -47,7 +48,7 @@ const queryOrders = async (options) => {
       // Map the array to format the deliveryDate field
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
-        deliveryDate: formatDate(doc.deliveryDate),
+        deliveryDate: doc.deliveryDate,
         createdAt: formatDate(doc.createdAt),
       }));
       return { data };

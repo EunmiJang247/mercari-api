@@ -20,6 +20,7 @@ const createCategory = async (catBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryCategories = async (filter, options) => {
+  console.log(filter)
   // const categories = await Category.findAll(filter, options);
   const categories = await Category.find({
     parentCatName: { $eq: filter['catName'] }
@@ -36,8 +37,19 @@ const getallcategory = async () => {
     throw error; // Propagate the error for higher-level handling
   }
 };
+const getallparentcategory = async () => {
+  try {
+    const categories = await Category.find({parentCatName: ''});
+    return categories;
+  } catch (error) {
+    // Handle error appropriately
+    console.error('Error in getallcategory:', error);
+    throw error; // Propagate the error for higher-level handling
+  }
+};
 module.exports = {
   createCategory,
   queryCategories,
-  getallcategory
+  getallcategory,
+  getallparentcategory
 };
