@@ -34,8 +34,8 @@ const ordersSchema = mongoose.Schema(
       trim: true,
     },
     deliveryDate: {
-      type: Date,
-      required: true,
+      type: String,
+      required: false,
       trim: true,
     },
     inspectionNeed: {
@@ -45,12 +45,12 @@ const ordersSchema = mongoose.Schema(
     },
     memoToStep: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     memoToDelivery: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     reservation: {

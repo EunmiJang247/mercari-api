@@ -9,11 +9,10 @@ const listOrders = {
 };
 const createOrder = {
   body: Joi.object().keys({
-    nickName: Joi.string().required(),
-    phoneNumber: Joi.string().required(),
-    name: Joi.string().required(),
-    transactionNumber: Joi.string().required(),
     address: Joi.string().required(),
+    agreeToTerms: Joi.boolean(),
+    deliveryDate: Joi.string().allow(''),
+    inspectionNeed: Joi.boolean().required(),
     items: Joi.array().items(Joi.object({
       category: Joi.string().required(),
       link: Joi.string().required(),
@@ -21,14 +20,15 @@ const createOrder = {
       quantity: Joi.string().required(),
       subcategory: Joi.string().required(),
     })).required(),
-    deliveryDate: Joi.date().required(),
-    inspectionNeed: Joi.boolean().required(),
-    memoToStep: Joi.string().required(),
-    memoToDelivery: Joi.string().required(),
-    reservation: Joi.boolean().required(),
+    memoToDelivery: Joi.string().allow(''),
+    memoToStep: Joi.string().allow(''),
+    name: Joi.string().required(),
+    nickName: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    transactionNumber: Joi.string().required(),
+    reservation: Joi.boolean(),
     uid: Joi.string().required(),
     utype: Joi.string().required(),
-    agreeToTerms: Joi.boolean().required(),
   })};
 module.exports = {
   listOrders,

@@ -59,7 +59,7 @@ const queryOrders = async (options) => {
 const queryOrdersByUser = async (options) => {
   try {
     const skip = (options.page - 1) * options.limit;
-    const dateFrom = options.dateFrom;
+    const dateFrom = new Date(options.dateFrom);
     const uid = options.uid;
     const dateTo = new Date(options.dateTo);
 
@@ -80,7 +80,7 @@ const queryOrdersByUser = async (options) => {
       // Map the array to format the deliveryDate field
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
-        deliveryDate: formatDate(doc.deliveryDate),
+        deliveryDate: doc.deliveryDate,
         createdAt: formatDate(doc.createdAt),
       }));
       return { data };
