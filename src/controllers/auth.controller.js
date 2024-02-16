@@ -44,6 +44,7 @@ const verifyTokens = catchAsync(async (req, res) => {
   const tokens = await authService.verifyAuth(authorization, req.body.user);
   res.send({ ...tokens });
 });
+
 const forgotPassword = catchAsync(async (req, res) => {
   const resetPasswordToken = await tokenService.generateResetPasswordToken(
     req.body.email

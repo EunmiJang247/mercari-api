@@ -68,7 +68,7 @@ const verifyToken = async (refreshToken) => {
       // Token has expired, handle the situation
       // For example, generate a new token or log the user out
       console.error('TokenExpiredError:', error.message);
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'Token has expired');
+      // throw new ApiError(httpStatus.UNAUTHORIZED, 'Token has expired');
     } else {
       // Handle other errors
       console.error('Error verifying token:', error.message);
@@ -76,11 +76,6 @@ const verifyToken = async (refreshToken) => {
     }
   }
 };
-
-
-
-
-
 
 /**
  * Generate auth tokens
@@ -91,7 +86,7 @@ const generateAuthTokens = async (user) => {
   try {
     const accessTokenExpires = moment().add(
       config.jwt.accessExpirationMinutes,
-      "minutes"
+      "days"
     );
     const accessToken = generateToken(
       user._id,

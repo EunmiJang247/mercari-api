@@ -31,7 +31,6 @@ const refreshTokens = {
 };
 
 const verifyTokens = {
-  
   body: Joi.object().keys({
     refreshToken: Joi.string().required(),
   }),
