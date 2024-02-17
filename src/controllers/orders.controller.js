@@ -6,7 +6,7 @@ const { ordersService } = require("../services");
 const { crawlingService } = require("../services");
 
 const listOrders = catchAsync(async (req, res) => {
-  const options = pick(req.query, ["sortBy", "dateFrom", "dateTo"]);
+  const options = pick(req.query, ["sortBy", "dateFrom", "dateTo", "nickName"]);
   const result = await ordersService.queryOrders(options);
   res.send(result);
 });

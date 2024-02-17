@@ -19,20 +19,42 @@ function formatDate(date) {
 const queryOrders = async (options) => {
   try {
     const skip = (options.page - 1) * options.limit;
-    const dateFrom = options.dateFrom;
-    const dateTo = new Date(options.dateTo);
+    const dateFrom = options?.dateFrom;
+    var dateTo = new Date(options?.dateTo);
+    dateTo.setDate(dateTo.getDate() + 1);
 
-    if (dateFrom && dateTo) {
-      const rawData = await Order.find({
-        createdAt: {
-          $gte: dateFrom,
-          $lte: dateTo,
-        }
-      }).sort({ createdAt: 1 })
-        .skip(skip)
-        .limit(parseInt(options.limit));
+    const nickName = options?.nickName;
 
-      // Map the array to format the deliveryDate field
+    if (dateFrom && dateTo || nickName) {
+      if (nickName && dateFrom && dateTo) {
+        var rawData = await Order.find({
+          createdAt: {
+            $gte: dateFrom,
+            $lte: dateTo,
+          },
+          nickName: { $regex: new RegExp(nickName, 'i') }, // 'i' flag for case-insensitive matching
+          isConfirm: 'Yes'
+        }).sort({ createdAt: 1 })
+          .skip(skip)
+          .limit(parseInt(options.limit));
+      } else if (nickName) {
+        var rawData = await Order.find({
+          nickName: { $regex: new RegExp(nickName, 'i') }, // 'i' flag for case-insensitive matching
+          isConfirm: 'Yes'
+        }).sort({ createdAt: 1 })
+          .skip(skip)
+          .limit(parseInt(options.limit));
+      } else {
+        var rawData = await Order.find({
+          createdAt: {
+            $gte: dateFrom,
+            $lte: dateTo,
+          },
+          isConfirm: 'Yes'
+        }).sort({ createdAt: 1 })
+          .skip(skip)
+          .limit(parseInt(options.limit));
+      }
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
         deliveryDate: 
