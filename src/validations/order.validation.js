@@ -29,6 +29,7 @@ const createOrder = {
     reservation: Joi.boolean(),
     uid: Joi.string().required(),
     utype: Joi.string().required(),
+    isConfirm: Joi.string().allow('').optional(),
   })};
 module.exports = {
   listOrders,

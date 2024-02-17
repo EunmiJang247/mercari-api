@@ -24,6 +24,10 @@ const createOrder = catchAsync(async (req, res) => {
   const order = await ordersService.createOrder(req.body);
   res.status(httpStatus.CREATED).send(order);
 });
+const createDraftOrder = catchAsync(async (req, res) => {
+  const order = await ordersService.createDraftOrder(req.body);
+  res.status(httpStatus.CREATED).send(order);
+});
 const updateOrder = catchAsync(async (req, res) => {
   const order = await ordersService.updateOrder(req.body);
   res.status(httpStatus.CREATED).send(order);
@@ -46,4 +50,5 @@ module.exports = {
   getorder,
   updateOrder,
   deleteorder,
+  createDraftOrder
 };

@@ -8,6 +8,8 @@ const validate = require("../../middlewares/validate");
 
 router.get("/category", categoryController.listClientCategory);
 router.post("/createorder", validate(orderValidation.createOrder), orderController.createOrder);
+router.post("/createdraftorder", orderController.createDraftOrder);
+
 router.put("/updateorder", orderController.updateOrder);
 
 router.get("/getorderbyid", orderController.getorder);

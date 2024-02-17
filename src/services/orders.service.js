@@ -41,7 +41,7 @@ const queryOrders = async (options) => {
       }));
       return { data };
     } else {
-      const rawData = await Order.find()
+      const rawData = await Order.find({isConfirm: 'Yes'})
         .skip(skip)
         .limit(parseInt(options.limit));
 
@@ -73,7 +73,8 @@ const queryOrdersByUser = async (options) => {
           $gte: dateFrom,
           $lte: dateTo,
         },
-        uid: uid
+        uid: uid,
+        isConfirm: 'Yes'
       }).sort({ createdAt: 1 })
         .skip(skip)
         .limit(parseInt(options.limit));
@@ -103,8 +104,15 @@ const queryOrdersByUser = async (options) => {
   }
 };
 const createOrder = async (orderbody) => {
+  orderbody.isConfirm = 'No';
     return Order.create(orderbody);
 };
+
+
+const createDraftOrder = async (orderbody) => {
+    return Order.create(orderbody);
+};
+
 const updateOrder = async (updateData) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(updateData.id, updateData, { new: true });
@@ -136,5 +144,6 @@ module.exports = {
   queryOrdersByUser,
   getOrder,
   updateOrder,
-  deleteOrderById
+  deleteOrderById,
+  createDraftOrder
 };

@@ -30,7 +30,7 @@ const ordersSchema = mongoose.Schema(
     },
     items: {
       type: [],
-      required: true,
+      required: false,
       trim: true,
     },
     deliveryDate: {
@@ -40,7 +40,7 @@ const ordersSchema = mongoose.Schema(
     },
     inspectionNeed: {
       type: Boolean,
-      required: true,
+      required: false,
       trim: true,
     },
     memoToStep: {
@@ -55,21 +55,26 @@ const ordersSchema = mongoose.Schema(
     },
     reservation: {
       type: Boolean,
-      required: true,
+      required: false,
       trim: true,
     },
     uid: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     agreeToTerms: {
       type: Boolean,
-      required: true,
+      required: false,
     },
     utype: {
       type: String,
-      required: true,
+      required: false,
+      trim: true,
+    },
+    isConfirm: {
+      type: String,
+      required: false,
       trim: true,
     },
     createdAt: { type: Date, default: Date.now },
