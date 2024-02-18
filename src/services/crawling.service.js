@@ -38,7 +38,8 @@ const createCrawling = async (bodyData) => {
           const imgElement = pictureElement.querySelector('img');
           return imgElement ? imgElement.src : null;
         }
-      });
+      }, items);
+      console.log(imageSources);
 
       if (imageSources !== null) {
         imageData.push({
@@ -62,6 +63,9 @@ const createCrawling = async (bodyData) => {
     await browser.close();
     return imageData;
 };
+
+//
+
 module.exports = {
   createCrawling,
 };
