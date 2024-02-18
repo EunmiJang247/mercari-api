@@ -46,8 +46,10 @@ const createCrawling = async (bodyData) => {
           imageSources: imageSources,
         });
       } else {
-        await browser.close();
-        break;
+        imageData.push({
+          url: bodyData[i].link,
+          imageSources: 'https://demofree.sirv.com/nope-not-here.jpg',
+        });
       }
     } catch {
       imageData.push({
@@ -57,11 +59,9 @@ const createCrawling = async (bodyData) => {
     }
     }
     
-  return imageData;
+    await browser.close();
+    return imageData;
 };
-
-//
-
 module.exports = {
   createCrawling,
 };
