@@ -33,6 +33,15 @@ const listClientCategory = catchAsync(async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+const healthcheck = (req, res) => {
+  try {
+    res.send('');
+  } catch (error) {
+    res.status(500).send('Internal Server Error');
+  }
+};
+
 const deleteSeller = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.query.id);
   res.status(httpStatus.NO_CONTENT).send();
@@ -41,6 +50,7 @@ const deleteSeller = catchAsync(async (req, res) => {
 module.exports = {
   deleteSeller,
   listCategory,
+  healthcheck,
   createCategory,
   listClientCategory,
   listparentCategory,

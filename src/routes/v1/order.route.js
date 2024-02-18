@@ -5,6 +5,7 @@ const orderValidation = require("../../validations/order.validation");
 const router = express.Router();
 const validate = require("../../middlewares/validate");
 
+router.get("/healthcheck", categoryController.healthcheck);
 router.get("/category", categoryController.listClientCategory);
 router.post("/createorder", validate(orderValidation.createOrder), orderController.createOrder);
 router.post("/createdraftorder", orderController.createDraftOrder);
