@@ -39,7 +39,6 @@ const createCrawling = async (bodyData) => {
           return imgElement ? imgElement.src : null;
         }
       }, items);
-      console.log(imageSources);
 
       if (imageSources !== null) {
         imageData.push({
@@ -47,9 +46,14 @@ const createCrawling = async (bodyData) => {
           imageSources: imageSources,
         });
       } else {
+        const thumbnailSources = await page.evaluate(() => {
+          const thumbnailElement = document.querySelector('link[rel="icon"]');
+          return thumbnailElement ? thumbnailElement.href : null;
+        });
+        
         imageData.push({
-          url: bodyData[i].link,
-          imageSources: 'https://demofree.sirv.com/nope-not-here.jpg',
+          url: items.link,
+          imageSources: thumbnailSources ? thumbnailSources : 'https://demofree.sirv.com/nope-not-here.jpg',
         });
       }
     } catch {
