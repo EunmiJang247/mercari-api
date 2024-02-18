@@ -34,14 +34,14 @@ const queryOrders = async (options) => {
           },
           nickName: { $regex: new RegExp(nickName, 'i') }, // 'i' flag for case-insensitive matching
           isConfirm: 'Yes'
-        }).sort({ createdAt: 1 })
+        }).sort({ createdAt: -1 })
           .skip(skip)
           .limit(parseInt(options.limit));
       } else if (nickName) {
         var rawData = await Order.find({
           nickName: { $regex: new RegExp(nickName, 'i') }, // 'i' flag for case-insensitive matching
           isConfirm: 'Yes'
-        }).sort({ createdAt: 1 })
+        }).sort({ createdAt: -1 })
           .skip(skip)
           .limit(parseInt(options.limit));
       } else {
@@ -51,7 +51,7 @@ const queryOrders = async (options) => {
             $lte: dateTo,
           },
           isConfirm: 'Yes'
-        }).sort({ createdAt: 1 })
+        }).sort({ createdAt: -1 })
           .skip(skip)
           .limit(parseInt(options.limit));
       }
@@ -97,7 +97,7 @@ const queryOrdersByUser = async (options) => {
         },
         uid: uid,
         isConfirm: 'Yes'
-      }).sort({ createdAt: 1 })
+      }).sort({ createdAt: -1 })
         .skip(skip)
         .limit(parseInt(options.limit));
 
