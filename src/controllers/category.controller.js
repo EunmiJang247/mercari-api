@@ -6,7 +6,6 @@ const { userService } = require('../services');
 const { categoryService } = require('../services');
 
 const createCategory = catchAsync(async (req, res) => {
-  // console.log(req.body);
   const user = await categoryService.createCategory(req.body);
   res.status(httpStatus.CREATED).send(user);
 });
