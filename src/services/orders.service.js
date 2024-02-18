@@ -17,6 +17,7 @@ function formatDate(date) {
   return date.toLocaleDateString("en-US", options);
 }
 const queryOrders = async (options) => {
+  console.log(options, "????")
   try {
     const skip = (options.page - 1) * options.limit;
     const dateFrom = options?.dateFrom;
@@ -64,6 +65,7 @@ const queryOrders = async (options) => {
       return { data };
     } else {
       const rawData = await Order.find({isConfirm: 'Yes'})
+        .sort({ createdAt: -1 })
         .skip(skip)
         .limit(parseInt(options.limit));
 
