@@ -10,8 +10,8 @@ const createCrawling = async (bodyData) => {
     try {
       const currentItem = bodyData[i];
       const imageSources = await page.goto(bodyData[i].link, {
-        waitUntil: 'networkidle2',
-        timeout: 30000, // 10초 후에 타임아웃
+        // waitUntil: 'networkidle2',
+        // timeout: 30000, // 10초 후에 타임아웃
       }).then(async () => {
         let pictureSelector;
         if (currentItem.link.includes("mercari")) {
