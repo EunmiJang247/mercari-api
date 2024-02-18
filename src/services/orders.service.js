@@ -126,12 +126,12 @@ const queryOrdersByUser = async (options) => {
   }
 };
 const createOrder = async (orderbody) => {
-  orderbody.isConfirm = 'No';
     return Order.create(orderbody);
 };
 
 
 const createDraftOrder = async (orderbody) => {
+    orderbody.isConfirm = 'No';
     return Order.create(orderbody);
 };
 
