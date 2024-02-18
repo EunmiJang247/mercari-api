@@ -38,7 +38,7 @@ const createCrawling = async (bodyData) => {
           const imgElement = pictureElement.querySelector('img');
           return imgElement ? imgElement.src : null;
         }
-      }, items);
+      });
 
       if (imageSources !== null) {
         imageData.push({
