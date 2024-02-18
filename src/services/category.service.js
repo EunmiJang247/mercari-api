@@ -20,7 +20,7 @@ const createCategory = async (catBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryCategories = async (filter, options) => {
-  console.log(filter)
+  // console.log(filter)
   // const categories = await Category.findAll(filter, options);
   const categories = await Category.find({
     parentCatName: { $eq: filter['catName'] }

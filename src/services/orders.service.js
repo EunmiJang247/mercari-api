@@ -17,7 +17,7 @@ function formatDate(date) {
   return date.toLocaleDateString("en-US", options);
 }
 const queryOrders = async (options) => {
-  console.log(options, "????")
+  // console.log(options, "????")
   try {
     const skip = (options.page - 1) * options.limit;
     const dateFrom = options?.dateFrom;
