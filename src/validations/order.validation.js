@@ -19,7 +19,7 @@ const createOrder = {
       price: Joi.string().required(),
       quantity: Joi.string().required(),
       subcategory: Joi.string().required(),
-      hsCode: Joi.string().required(),
+      hsCode: Joi.number().required(),
     })).required(),
     memoToDelivery: Joi.string().allow(''),
     memoToStep: Joi.string().allow(''),
