@@ -11,8 +11,8 @@ const createCategory = catchAsync(async (req, res) => {
 });
 
 const deleteCategory = catchAsync(async (req, res) => {
-  const user = await categoryService.deleteCategory(req.body);
-  res.status(httpStatus.CREATED).send(user);
+  await categoryService.deleteCategory(req.body);
+  res.send();
 });
 
 const listCategory = catchAsync(async (req, res) => {

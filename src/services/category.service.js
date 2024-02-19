@@ -12,19 +12,12 @@ const createCategory = async (catBody) => {
 
 const deleteCategory = async (catBody) => {
   if(catBody.role === "child") {
-    await Category.deleteMany({
-      parentCatName: { $eq: catBody.catName }
-    });
+    await Category.findOneAndDelete({ prodNmaeko: catBody.catName });
   }
   if(catBody.role === "parent") {
-    const children = await Category.find({
-      parentCatName: { $eq: catBody.catName }
-    });
-    await Category.findOneAndDelete({
-      prodNmaeko: { $eq: catBody.catName }
-    });
+    await Category.deleteMany({ parentCatName: catBody.catName });
+    await Category.findOneAndDelete({ prodNmaeko: catBody.catName });
   }
-  // return Category.create(catBody);
 };
 
 /**
