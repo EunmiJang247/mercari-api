@@ -7,6 +7,7 @@ const listCategory = {
     page: Joi.number().integer(),
   }),
 };
+
 const createCategory = {
   body: Joi.object().keys({
     prodNmaeEng: Joi.string().required(),
@@ -15,7 +16,15 @@ const createCategory = {
     hscCode: Joi.number().required(),
   }),
 };
+
+const deleteCategory = {
+  body: Joi.object().keys({
+    role: Joi.string().required(),
+    catName: Joi.string().required(),
+  }),
+};
 module.exports = {
   listCategory,
-  createCategory
+  createCategory,
+  deleteCategory
 };

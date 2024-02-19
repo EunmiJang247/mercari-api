@@ -10,6 +10,10 @@ const createCategory = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(user);
 });
 
+const deleteCategory = catchAsync(async (req, res) => {
+  const user = await categoryService.deleteCategory(req.body);
+  res.status(httpStatus.CREATED).send(user);
+});
 
 const listCategory = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['catName']);
@@ -48,6 +52,7 @@ const deleteSeller = catchAsync(async (req, res) => {
 
 module.exports = {
   deleteSeller,
+  deleteCategory,
   listCategory,
   healthcheck,
   createCategory,

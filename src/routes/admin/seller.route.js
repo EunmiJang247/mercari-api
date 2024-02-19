@@ -27,6 +27,12 @@ router.post(
   validate(categoryValidation.createCategory),
   categoryController.createCategory
 );
+router.post(
+  "/category-delete",
+  isAuth,
+  validate(categoryValidation.deleteCategory),
+  categoryController.deleteCategory
+);
 router.get(
   "/subcategory-listing",
   isAuth,

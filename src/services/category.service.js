@@ -10,6 +10,23 @@ const createCategory = async (catBody) => {
   return Category.create(catBody);
 };
 
+const deleteCategory = async (catBody) => {
+  if(catBody.role === "child") {
+    await Category.deleteMany({
+      parentCatName: { $eq: catBody.catName }
+    });
+  }
+  if(catBody.role === "parent") {
+    const children = await Category.find({
+      parentCatName: { $eq: catBody.catName }
+    });
+    await Category.findOneAndDelete({
+      prodNmaeko: { $eq: catBody.catName }
+    });
+  }
+  // return Category.create(catBody);
+};
+
 /**
  * Query for categories
  * @param {Object} filter - Mongo filter
@@ -49,6 +66,7 @@ const getallparentcategory = async () => {
 };
 module.exports = {
   createCategory,
+  deleteCategory,
   queryCategories,
   getallcategory,
   getallparentcategory
