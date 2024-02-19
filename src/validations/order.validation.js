@@ -20,6 +20,7 @@ const createOrder = {
       quantity: Joi.string().required(),
       subcategory: Joi.string().required(),
       hsCode: Joi.number().required(),
+      prodNmaeEng: Joi.string().required(),
     })).required(),
     memoToDelivery: Joi.string().allow(''),
     memoToStep: Joi.string().allow(''),
