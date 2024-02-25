@@ -61,4 +61,10 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
+  s3: {
+    accessKeyId: envVars.S3_ACCESS_KEY_ID,
+    secretAccessKey: envVars.S3_SECRET_ACCESS_KEY,
+    region: envVars.S3_REGION,
+    bucket: envVars.S3_BUCKET,
+  },
 };
