@@ -13,12 +13,11 @@ const ApiError = require("../utils/ApiError");
  * @returns {Promise<QueryResult>}
  */
 // Function to format date as a string (adjust the format as needed)
-function formatDate(date) {
-  const options = { year: "numeric", month: "2-digit", day: "2-digit", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false};
-  return date.toLocaleDateString("en-US", options);
-}
+// function formatDate(date) {
+//   const options = { year: "numeric", month: "2-digit", day: "2-digit", hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false};
+//   return date.toLocaleDateString("en-US", options);
+// }
 const queryOrders = async (options) => {
-  // console.log(options, "????")
   try {
     const skip = (options.page - 1) * options.limit;
     const dateFrom = options?.dateFrom;
@@ -61,8 +60,10 @@ const queryOrders = async (options) => {
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
         deliveryDate: 
         doc.deliveryDate,
-        createdAt: formatDate(doc.createdAt),
+        createdAt: doc.createdAt,
+        // createdAt: formatDate(doc.createdAt),
       }));
+      console.log(data)
       return { data };
     } else {
       const rawData = await Order.find({isConfirm: 'Yes'})
@@ -74,8 +75,10 @@ const queryOrders = async (options) => {
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
         deliveryDate: doc.deliveryDate,
-        createdAt: formatDate(doc.createdAt),
+        // createdAt: formatDate(doc.createdAt),
+        createdAt: doc.createdAt,
       }));
+      console.log(data)
       return { data };
     }
   } catch (error) {
@@ -108,7 +111,8 @@ const queryOrdersByUser = async (options) => {
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
         deliveryDate: doc.deliveryDate,
-        createdAt: formatDate(doc.createdAt),
+        // createdAt: formatDate(doc.createdAt),
+        createdAt: doc.createdAt,
       }));
       return { data };
     } else {
@@ -119,8 +123,10 @@ const queryOrdersByUser = async (options) => {
       // Map the array to format the deliveryDate field
       const data = rawData.map((doc) => ({
         ...doc.toObject(), // Convert the Mongoose document to a plain JavaScript object
-        deliveryDate: formatDate(doc.deliveryDate),
-        createdAt: formatDate(doc.createdAt),
+        // deliveryDate: formatDate(doc.deliveryDate),
+        deliveryDate: doc.deliveryDate,
+        createdAt: doc.createdAt,
+        // createdAt: formatDate(doc.createdAt),
       }));
       return { data };
     }
