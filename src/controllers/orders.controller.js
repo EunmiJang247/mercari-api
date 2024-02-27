@@ -23,6 +23,7 @@ const createCrawling = catchAsync(async (req, res) => {
 const createOrder = catchAsync(async (req, res) => {
   const order = await ordersService.createOrder(req.body);
   res.status(httpStatus.CREATED).send(order);
+  await ordersService.editImagePicUrl(order._id)
 });
 const createDraftOrder = catchAsync(async (req, res) => {
   const order = await ordersService.createDraftOrder(req.body);

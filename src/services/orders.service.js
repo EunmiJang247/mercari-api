@@ -128,66 +128,63 @@ const queryOrdersByUser = async (options) => {
     console.error("Error fetching data:", error.message);
   }
 };
-const createOrder = async (orderbody) => {
-  //크롤링 코드!
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  
-  // let imageData = [];
 
-    for (let i = 0; i < orderbody.items.length ; i += 1 ) {
-      try {
-          const items = orderbody.items[i];
-          await page.goto(orderbody.items[i].link, {
-            waitUntil: 'networkidle2',
-            timeout: 30000,
-          });
+const fetchImageSource = async (page, item) => {
+  try {
+    await page.goto(item.link, {
+      waitUntil: 'networkidle2',
+      timeout: 30000,
+    });
 
-          const imageSources = await page.evaluate((items) => {
-            let pictureSelector;
-            if (items.link.includes("mercari")) {
-              // console.log(`Processing URL: ${items.link} for jp.mercari.com`);
-              pictureSelector = 'picture';
-            } else if (items.link.includes("amiami")) {
-              // console.log(`Processing URL: ${items.link} for www.amiami.jp`);
-              pictureSelector = '.main_image_area';
-            } else if (items.link.includes("rakuten")) {
-              // console.log(`Processing URL: ${items.link} for biccamera.rakuten.co.jp`);
-              pictureSelector = '.popup-modal2';
-            } else if (items.link.includes("fril")) {
-              // console.log(`Processing URL: ${items.link} for item.fril.jp`);
-              pictureSelector = '#photoFrame';
-            } else if (items.link.includes("paypayfleamarket")) {
-              pictureSelector = '.slick-current';
-            } else {
-              // console.log(`No match found for URL: ${items.link}`);
-            }
-            const pictureElement = document.querySelector(pictureSelector);
+    const imageSources = await page.evaluate((item) => {
+      let pictureSelector;
+      if (item.link.includes("mercari")) {
+        pictureSelector = 'picture';
+      } else if (item.link.includes("amiami")) {
+        pictureSelector = '.main_image_area';
+      } else if (item.link.includes("rakuten")) {
+        pictureSelector = '.popup-modal2';
+      } else if (item.link.includes("fril")) {
+        pictureSelector = '#photoFrame';
+      } else if (item.link.includes("paypayfleamarket")) {
+        pictureSelector = '.slick-current';
+      }
+      const pictureElement = document.querySelector(pictureSelector);
 
-            if (pictureElement) {
-              const imgElement = pictureElement.querySelector('img');
-              return imgElement ? imgElement.src : null;
-            }
-          }, items);
+      if (pictureElement) {
+        const imgElement = pictureElement.querySelector('img');
+        return imgElement ? imgElement.src : null;
+      }
+    }, item);
 
-          if (imageSources !== null) {
-            orderbody.items[i].imageSrc = imageSources;
-          } else {
-            const thumbnailSources = await page.evaluate(() => {
-              const thumbnailElement = document.querySelector('link[rel="icon"]');
-              return thumbnailElement ? thumbnailElement.href : null;
-            });
-            orderbody.items[i].imageSrc = thumbnailSources ? thumbnailSources : 'https://demofree.sirv.com/nope-not-here.jpg';
-          }
-        } catch {
-          orderbody.items[i].imageSrc = 'https://demofree.sirv.com/nope-not-here.jpg';
-        }
-    }
-
-    await browser.close();
-    return Order.create(orderbody);
+    return imageSources !== null ? imageSources : await page.evaluate(() => {
+      const thumbnailElement = document.querySelector('link[rel="icon"]');
+      return thumbnailElement ? thumbnailElement.href : null;
+    }) || 'https://demofree.sirv.com/nope-not-here.jpg';
+  } catch (error) {
+    return 'https://demofree.sirv.com/nope-not-here.jpg';
+  }
 };
 
+const createOrder = async (orderBody) => {
+  return Order.create(orderBody);
+};
+
+const editImagePicUrl = async (id) => {
+  const order = await Order.findById(id)
+  const browser = await puppeteer.launch();
+
+  const imageFetchPromises = order.items.map(async (item) => {
+    const page = await browser.newPage(); // 각 항목 처리를 위한 새 페이지 인스턴스
+    const imageSrc = await fetchImageSource(page, item);
+    await page.close(); // 항목 처리 후 페이지 닫기
+    return { ...item, imageSrc }; // 이미지 소스가 업데이트된 새 항목 객체 반환
+  });
+
+  const updatedItems = await Promise.all(imageFetchPromises);
+  await browser.close();
+  await Order.findByIdAndUpdate(id, { $set: { items: updatedItems } }, { new: true });
+}
 
 const createDraftOrder = async (orderbody) => {
     orderbody.isConfirm = 'No';
@@ -210,6 +207,7 @@ const getOrder = async (id) => {
 
 const deleteOrderById = async (id) => {
   try {
+    console.log(id)
     const deletedOrder = await Order.findByIdAndDelete(id);
     return deletedOrder;
   } catch (error) {
@@ -222,6 +220,7 @@ const deleteOrderById = async (id) => {
 module.exports = {
   queryOrders,
   createOrder,
+  editImagePicUrl,
   queryOrdersByUser,
   getOrder,
   updateOrder,
