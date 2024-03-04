@@ -1,5 +1,6 @@
 const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
+const jwt = require('jsonwebtoken');
 const {
   authService,
   userService,
@@ -7,6 +8,7 @@ const {
   emailService,
 } = require("../services");
 const axios = require("axios");
+const config = require("../config/config");
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -41,8 +43,9 @@ const refreshTokens = catchAsync(async (req, res) => {
 
 const verifyTokens = catchAsync(async (req, res) => {
   const { authorization } = req.headers;
-  const tokens = await authService.verifyAuth(authorization, req.body.user);
-  res.send({ ...tokens });
+  const { refreshToken } = req.body;
+  const payload = jwt.verify(refreshToken, config.jwt.secret);
+  res.send(authorization);
 });
 
 const forgotPassword = catchAsync(async (req, res) => {

@@ -14,6 +14,6 @@ router.get('/oauth/', authController.naverOauth);
 router.post(
     "/verify-tokens",
     validate(authValidation.verifyTokens),
-    authController.refreshTokens
+    authController.verifyTokens
   );
 module.exports = router;

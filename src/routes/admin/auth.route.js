@@ -15,7 +15,7 @@ router.post("/logout", validate(authValidation.logout), authController.logout);
 router.post(
   "/verify-tokens",
   validate(authValidation.verifyTokens),
-  authController.refreshTokens
+  authController.verifyTokens
 );
 
 module.exports = router;

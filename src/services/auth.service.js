@@ -52,9 +52,9 @@ const refreshAuth = async (refreshToken) => {
     if (!user) {
       throw new Error();
     }
-    var newToken = await tokenService.generateAuthTokens(user);
+    // var newToken = await tokenService.generateAuthTokens(user);
 
-    return newToken;
+    // return newToken;
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
   }

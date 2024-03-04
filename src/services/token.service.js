@@ -61,7 +61,7 @@ const verifyToken = async (refreshToken) => {
     const payload = jwt.verify(refreshToken, config.jwt.secret);
     if (!payload) {
       throw new Error("Token not found");
-    } 
+    }
     return payload;
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
