@@ -33,6 +33,7 @@ const createOrder = {
     utype: Joi.string().required(),
     isConfirm: Joi.string().allow('').optional(),
     reservationText: Joi.string().allow('').optional(),
+    zipcode:  Joi.string().allow('').required(),
   })};
 module.exports = {
   listOrders,
