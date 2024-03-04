@@ -64,7 +64,7 @@ const queryOrders = async (options) => {
         createdAt: doc.createdAt,
         // createdAt: formatDate(doc.createdAt),
       }));
-      console.log(data)
+      // console.log(data)
       return { data };
     } else {
       const rawData = await Order.find({isConfirm: 'Yes'})
@@ -79,7 +79,7 @@ const queryOrders = async (options) => {
         // createdAt: formatDate(doc.createdAt),
         createdAt: doc.createdAt,
       }));
-      console.log(data)
+      // console.log(data)
       return { data };
     }
   } catch (error) {
@@ -135,46 +135,6 @@ const queryOrdersByUser = async (options) => {
     console.error("Error fetching data:", error.message);
   }
 };
-
-// const fetchImageSource = async (page, item) => {
-//   console.log(item, "item..")
-//   try {
-//     await page.goto(item.link, {
-//       waitUntil: 'networkidle2',
-//       timeout: 3000000,
-//     });
-
-//     // 브라우저 콘솔 로그를 수신 대기
-//     page.on('console', msg => console.log('PAGE LOG:', msg.text()));
-
-//     await page.evaluate((item) => {
-//       let pictureSelector;
-//       if (item.link.includes("mercari")) {
-//         pictureSelector = 'picture';
-//       } else if (item.link.includes("amiami")) {
-//         pictureSelector = '.main_image_area';
-//         console.log(pictureSelector, 'pictureSelector')
-//       } else if (item.link.includes("rakuten")) {
-//         pictureSelector = '.popup-modal2';
-//       } else if (item.link.includes("fril")) {
-//         pictureSelector = '#photoFrame';
-//       } else if (item.link.includes("paypayfleamarket")) {
-//         pictureSelector = '.slick-current';
-//       }
-//       const pictureElement = document.querySelector(pictureSelector);
-//       console.log(pictureElement, "pictureElement");
-
-//       if (pictureElement) {
-//         const imgElement = pictureElement.querySelector('img');
-//         return imgElement ? imgElement.src : null;
-//       }
-//     }, item);
-
-//     console.log('?')
-//   } catch (error) {
-//     return 'https://demofree.sirv.com/nope-not-here.jpg';
-//   }
-// };
 
 const openBrowser  = async (url) => {
   try {
@@ -262,7 +222,7 @@ const getOrder = async (id) => {
 
 const deleteOrderById = async (id) => {
   try {
-    console.log(id)
+    // console.log(id)
     const deletedOrder = await Order.findByIdAndDelete(id);
     return deletedOrder;
   } catch (error) {
