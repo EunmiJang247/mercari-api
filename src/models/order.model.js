@@ -87,6 +87,11 @@ const ordersSchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    businessName: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },
