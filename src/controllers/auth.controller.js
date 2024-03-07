@@ -42,10 +42,10 @@ const refreshTokens = catchAsync(async (req, res) => {
 });
 
 const verifyTokens = catchAsync(async (req, res) => {
-  const { authorization } = req.headers;
-  const { refreshToken } = req.body;
-  const payload = jwt.verify(refreshToken, config.jwt.secret);
-  res.send(authorization);
+  const accessToken = req.headers.authorization;
+  const payload = jwt.verify(accessToken, config.jwt.secret);
+  const userInfo = await userService.getUserById(payload._id);
+  res.send(userInfo);
 });
 
 const forgotPassword = catchAsync(async (req, res) => {

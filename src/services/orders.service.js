@@ -165,8 +165,6 @@ const imageFetchPromises = async (order) => {
         imageSrc = $('#main > article > div.sc-8251d49d-2.sc-c2ceaf31-0.vnkQK.bsFmrt.mer-spacing-b-32 > section > div > div > div.sc-8251d49d-2.fXQxtb > div > div.slick-slider.slick-initialized > div.slick-list > div > div.slick-slide.slick-active.slick-current > div > div > div > div > figure > div.imageContainer__f8ddf3a2 > picture > img').attr('src');
       } else if (orderOne.link.includes("amiami")) {
         imageSrc = $('#maincontents > div.image_area > div.main_image_area > div > img').attr('src');
-      } else if (orderOne.link.includes("rakuten")) {
-        imageSrc = $('#item > div > div.p-productDetailv2__mainLeft > div.c-switchSlide.js-switchSlideTrigger > ul.c-switchSlide__main.pc_page > li > a > img').attr('src');
       } else if (orderOne.link.includes("fril")) {
         imageSrc = $('#item-slider > div.sp-slides-container > div.sp-mask.sp-grab > div > div:nth-child(1) > div > img').attr('src');
       } else if (orderOne.link.includes("paypayfleamarket")) {
@@ -178,13 +176,12 @@ const imageFetchPromises = async (order) => {
       }
 
       if (!imageSrc) {
-        imageUrl = $('meta[property="og:image"]').attr('content');
+        imageSrc = $('meta[property="og:image"]').attr('content');
       }
 
       if (!imageSrc) {
         imageSrc = 'https://demofree.sirv.com/nope-not-here.jpg'; // 기본 이미지 URL
       }
-
       links.push({...orderOne, imageSrc})
   }
   return links;
