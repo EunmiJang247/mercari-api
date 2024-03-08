@@ -14,6 +14,7 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/v1");
 const { errorConverter, errorHandler } = require("./middlewares/error");
 const ApiError = require("./utils/ApiError");
+const controller = require('./controllers/mongo.controller')
 
 const app = express();
 
@@ -84,5 +85,9 @@ app.use(errorConverter);
 
 // handle error
 app.use(errorHandler);
+
+setInterval(() => {
+  controller.removeDataMoreThanThreeMonth();
+}, [604800000]);
 
 module.exports = app;

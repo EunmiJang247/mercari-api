@@ -7,7 +7,7 @@ const categoryController = require("../../controllers/category.controller");
 const sellerUserController = require("../../controllers/seller.controller");
 const ordersController = require("../../controllers/orders.controller");
 
-const { isAuth } = require("../../middlewares/auth");
+const { isAuth, isSellerAuth } = require("../../middlewares/auth");
 const router = express.Router();
 router.get(
   "/seller-listing",
@@ -44,7 +44,7 @@ router.get(
   isAuth,
   categoryController.listparentCategory
 );
-router.get("/orders-listing", isAuth, ordersController.listOrders);
+router.get("/orders-listing", isSellerAuth, ordersController.listOrders);
 router.post("/orders-crawling", ordersController.createCrawling);
 
 module.exports = router;
