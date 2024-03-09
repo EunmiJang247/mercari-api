@@ -141,7 +141,7 @@ const openBrowser = async (url) => {
     const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
     const page = await browser.newPage();
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 10000 }); // waitUntil 옵션을 networkidle0으로 변경
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 }); // waitUntil 옵션을 networkidle0으로 변경
     const content = await page.content();
     await page.close();
     await browser.close();
