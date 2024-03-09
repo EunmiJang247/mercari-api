@@ -136,61 +136,123 @@ const queryOrdersByUser = async (options) => {
   }
 };
 
-const openBrowser  = async (url) => {
-  try {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, {
-      waitUntil: "networkidle2" // 500ms 동안 두 개 이상의 네트워크 연결이 없을 때 탐색이 완료되는 것으로 간주
+// const imageFetchPromises = async (order) => {
+//   const links = [];
+//   for(let i=0 ;i < order.items.length; i+=1) {
+//     const orderOne = order.items[i];
+//     const response = await openBrowser(orderOne.link);
+//     const $ = cheerio.load(response); // 가져온 HTML 코드를 cheerio로 로드합니다.
+
+//       let imageSrc;
+//       if (orderOne.link.includes("mercari")) {
+//         imageSrc = $('#main > article > div.sc-8251d49d-2.sc-c2ceaf31-0.vnkQK.bsFmrt.mer-spacing-b-32 > section > div > div > div.sc-8251d49d-2.fXQxtb > div > div.slick-slider.slick-initialized > div.slick-list > div > div.slick-slide.slick-active.slick-current > div > div > div > div > figure > div.imageContainer__f8ddf3a2 > picture > img').attr('src');
+//       } else if (orderOne.link.includes("amiami")) {
+//         imageSrc = $('#maincontents > div.image_area > div.main_image_area > div > img').attr('src');
+//       } else if (orderOne.link.includes("fril")) {
+//         imageSrc = $('#item-slider > div.sp-slides-container > div.sp-mask.sp-grab > div > div:nth-child(1) > div > img').attr('src');
+//       } else if (orderOne.link.includes("paypayfleamarket")) {
+//         imageSrc = $('#__next > div > main > div.sc-9bae193f-0.eWnaAG.ItemMain__Component > div:nth-child(1) > div > div.slick-slider.slick-initialized > div > div > div.slick-slide.slick-active.slick-current > div > div > img').attr('src');
+//       } else if (orderOne.link.includes("rakuten")) {
+//         imageSrc = $('#pagebody > table > tbody > tr > td > table:nth-child(2) > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(3) > table:nth-child(2) > tbody > tr > td > table:nth-child(6) > tbody > tr > td:nth-child(1) > div > div > div > div > div > img').attr('src');
+//       } else if (orderOne.link.includes("tower.jp")) {
+//         imageSrc = $('#main-image').attr('src');
+//       }
+
+//       if (!imageSrc) {
+//         imageSrc = $('meta[property="og:image"]').attr('content');
+//       }
+
+//       if (!imageSrc) {
+//         imageSrc = 'https://demofree.sirv.com/nope-not-here.jpg'; // 기본 이미지 URL
+//       }
+//       links.push({...orderOne, imageSrc})
+//   }
+//   return links;
+// }
+
+function limitConcurrency(max) {
+  const tasks = [];
+  let activeCount = 0;
+
+  const runTask = () => {
+    if (tasks.length > 0 && activeCount < max) {
+      activeCount++;
+      const { resolve, fn } = tasks.shift();
+      fn().then(resolve).finally(() => {
+        activeCount--;
+        runTask();
+      });
+      runTask(); // 다음 태스크 시작
+    }
+  };
+
+  return function(fn) {
+    return new Promise(resolve => {
+      tasks.push({ resolve, fn });
+      runTask();
     });
+  };
+}
+
+const openBrowser = async (url) => {
+  try {
+    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
+    await page.goto(url, { waitUntil: 'networkidle2', timeout: 600000 }); // waitUntil 옵션을 networkidle0으로 변경
     const content = await page.content();
     await page.close();
     await browser.close();
     return content;
-  } catch(e) {
-    console.log(e, "에러");
+  } catch (e) {
+    console.log(`${e} 에러, URL: ${url}`);
     return '';
   }
-}
+};
+
+const fetchImageForItem = async (orderOne) => {
+  const response = await openBrowser(orderOne.link);
+  const $ = cheerio.load(response);
+  let imageSrc;
+
+  if (orderOne.link.includes("mercari")) {
+    imageSrc = $('#main > article > div.sc-8251d49d-2.sc-148bdf4f-0.vnkQK.iJIOiA.mer-spacing-b-32 > section > div > div > div > div > div.slick-slider.slick-initialized > div.slick-list > div > div.slick-slide.slick-active.slick-current > div > div > div > div > figure > div.imageContainer__f8ddf3a2 > picture > img').attr('src');
+  } else if (orderOne.link.includes("amiami")) {
+    imageSrc = $('#maincontents > div.image_area > div.main_image_area > div > img').attr('src');
+  } else if (orderOne.link.includes("fril")) {
+    imageSrc = $('#item-slider > div.sp-slides-container > div.sp-mask.sp-grab > div > div:nth-child(1) > div > img').attr('src');
+  } else if (orderOne.link.includes("paypayfleamarket")) {
+    imageSrc = $('#__next > div > main > div.sc-9bae193f-0.eWnaAG.ItemMain__Component > div:nth-child(1) > div > div.slick-slider.slick-initialized > div > div > div.slick-slide.slick-active.slick-current > div > div > img').attr('src');
+  } else if (orderOne.link.includes("rakuten")) {
+    imageSrc = $('#pagebody > table > tbody > tr > td > table:nth-child(2) > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(3) > table:nth-child(2) > tbody > tr > td > table:nth-child(6) > tbody > tr > td:nth-child(1) > div > div > div > div > div > img').attr('src');
+  } else if (orderOne.link.includes("tower.jp")) {
+    imageSrc = $('#main-image').attr('src');
+  }
+
+  console.log(imageSrc, "imageSrc있어요?")
+
+  if (!imageSrc) {
+    imageSrc = $('meta[property="og:image"]').attr('content') || 'https://demofree.sirv.com/nope-not-here.jpg';
+  }
+
+  return { ...orderOne, imageSrc };
+};
 
 const imageFetchPromises = async (order) => {
-  const links = [];
-  for(let i=0 ;i < order.items.length; i+=1) {
-    const orderOne = order.items[i];
-    const response = await openBrowser(orderOne.link);
-    const $ = cheerio.load(response); // 가져온 HTML 코드를 cheerio로 로드합니다.
-
-      let imageSrc;
-      if (orderOne.link.includes("mercari")) {
-        imageSrc = $('#main > article > div.sc-8251d49d-2.sc-c2ceaf31-0.vnkQK.bsFmrt.mer-spacing-b-32 > section > div > div > div.sc-8251d49d-2.fXQxtb > div > div.slick-slider.slick-initialized > div.slick-list > div > div.slick-slide.slick-active.slick-current > div > div > div > div > figure > div.imageContainer__f8ddf3a2 > picture > img').attr('src');
-      } else if (orderOne.link.includes("amiami")) {
-        imageSrc = $('#maincontents > div.image_area > div.main_image_area > div > img').attr('src');
-      } else if (orderOne.link.includes("fril")) {
-        imageSrc = $('#item-slider > div.sp-slides-container > div.sp-mask.sp-grab > div > div:nth-child(1) > div > img').attr('src');
-      } else if (orderOne.link.includes("paypayfleamarket")) {
-        imageSrc = $('#__next > div > main > div.sc-9bae193f-0.eWnaAG.ItemMain__Component > div:nth-child(1) > div > div.slick-slider.slick-initialized > div > div > div.slick-slide.slick-active.slick-current > div > div > img').attr('src');
-      } else if (orderOne.link.includes("rakuten")) {
-        imageSrc = $('#pagebody > table > tbody > tr > td > table:nth-child(2) > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(3) > table:nth-child(2) > tbody > tr > td > table:nth-child(6) > tbody > tr > td:nth-child(1) > div > div > div > div > div > img').attr('src');
-      } else if (orderOne.link.includes("tower.jp")) {
-        imageSrc = $('#main-image').attr('src');
-      }
-
-      if (!imageSrc) {
-        imageSrc = $('meta[property="og:image"]').attr('content');
-      }
-
-      if (!imageSrc) {
-        imageSrc = 'https://demofree.sirv.com/nope-not-here.jpg'; // 기본 이미지 URL
-      }
-      links.push({...orderOne, imageSrc})
-  }
+  const links = await Promise.all(order.items.map(item => fetchImageForItem(item)));
   return links;
-}
+};
 
 const editImagePicUrl = async (id) => {
-  const order = await Order.findById(id);
-  const updatedItems = await imageFetchPromises(order);
-  await Order.findByIdAndUpdate(id, { $set: { items: updatedItems } }, { new: true });
+  try {
+    const order = await Order.findById(id);
+    const updatedItems = await imageFetchPromises(order);
+    await Order.findByIdAndUpdate(id, { $set: { items: updatedItems } }, { new: true });
+    console.log(updatedItems, "updatedItems");
+  } catch (error) {
+    console.error("Error updating image URL for order:", id, error);
+    // 에러 로깅 또는 재시도 로직
+  }
   return '';
 }
 
