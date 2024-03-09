@@ -34,7 +34,7 @@ const createOrder = {
     isConfirm: Joi.string().allow('').optional(),
     reservationText: Joi.string().allow('').optional(),
     zipcode:  Joi.string().allow('').required(),
-    businessName: Joi.string().allow('').required(),
+    businessName: Joi.string().allow('').optional(),
   })};
 module.exports = {
   listOrders,
