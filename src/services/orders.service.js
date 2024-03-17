@@ -183,7 +183,7 @@ const fetchImageForItem = async (orderOne) => {
       data: {
         url: orderOne.link
       },
-      timeout: 100000,
+      timeout: 60000 * 30,
     });
     imageSrc = imageSrcFromServer.data.image_url
     console.log(imageSrc, "imageSrc..22")
