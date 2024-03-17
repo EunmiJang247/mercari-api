@@ -32,6 +32,7 @@ const createDraftOrder = catchAsync(async (req, res) => {
 const updateOrder = catchAsync(async (req, res) => {
   const order = await ordersService.updateOrder(req.body);
   res.status(httpStatus.CREATED).send(order);
+  await ordersService.editImagePicUrl(order._id)
 });
 const getorder = catchAsync(async (req, res) => {
   const order = await ordersService.getOrder(req.query.id);
