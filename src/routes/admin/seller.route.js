@@ -11,37 +11,37 @@ const { isAuth, isSellerAuth } = require("../../middlewares/auth");
 const router = express.Router();
 router.get(
   "/seller-listing",
-  isAuth,
+  isSellerAuth,
   validate(sellerValidation.listSeller),
   sellerUserController.listSeller
 );
 router.delete(
   "/delete-seller",
-  isAuth,
+  isSellerAuth,
   validate(sellerValidation.deleteSeller),
   sellerUserController.deleteSeller
 );
 router.post(
   "/add-category",
-  isAuth,
+  isSellerAuth,
   validate(categoryValidation.createCategory),
   categoryController.createCategory
 );
 router.post(
   "/category-delete",
-  isAuth,
+  isSellerAuth,
   validate(categoryValidation.deleteCategory),
   categoryController.deleteCategory
 );
 router.get(
   "/subcategory-listing",
-  isAuth,
+  isSellerAuth,
   validate(categoryValidation.listCategory),
   categoryController.listCategory
 );
 router.get(
   "/category-listing",
-  isAuth,
+  isSellerAuth,
   categoryController.listparentCategory
 );
 router.get("/orders-listing", isSellerAuth, ordersController.listOrders);

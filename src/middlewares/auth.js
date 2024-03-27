@@ -25,7 +25,7 @@ const isSellerAuth = async (req, res, next) => {
     const token = authorization.split(" ")[1];
     const decoded = await tokenService.verifyToken(token);
     const user = await User.findById(decoded._id);
-    if(user.role === 'admin') {
+    if(user.role === 'admin' || user.role === 'Seller') {
       if (decoded) {
         next();
       }
